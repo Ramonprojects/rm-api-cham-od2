@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PSG vs Arsenal — VIP</title>
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1285074343124616');
+fbq('track', 'PageView');
+async function dispararLead(e) {
+  e.preventDefault();
+  const eventId = 'cr_' + Date.now();
+  fbq('track', 'Contact', { currency: 'BRL', value: 0 }, { eventID: eventId });
+  try {
+    await fetch('https://track-jp-production.up.railway.app/api/lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fbp: document.cookie.match(/_fbp=([^;]+)/)?.[1] || null,
+        fbc: document.cookie.match(/_fbc=([^;]+)/)?.[1] || null,
+        userAgent: navigator.userAgent,
+        eventId: eventId
+      })
+    });
+  } catch(err) {}
+  window.location.href = 'https://ad.nexboard.cc/';
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,800;1,900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<style>
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+
+html, body {
+  font-family: 'Montserrat', sans-serif;
+  background: #03040b;
+  color: #fff;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 300;
+}
+
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+  background-size: 72px 72px;
+  pointer-events: none;
+  z-index: -1;
+}
+
+#cursor-glow {
+  position: fixed;
+  width: 460px; height: 460px;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(20,90,255,.18) 0%,
+    rgba(80,20,220,.06) 45%,
+    transparent 70%
+  );
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  filter: blur(32px);
+  z-index: 100;
+  will-change: left, top;
+}
+
+.bg-blue {
+  position: fixed; border-radius: 50%;
+  width: 560px; height: 560px;
+  background: #0033ff;
+  left: -200px; top: 50%; transform: translateY(-50%);
+  filter: blur(130px); opacity: .16;
+  pointer-events: none; z-index: -2;
+}
+.bg-red {
+  position: fixed; border-radius: 50%;
+  width: 480px; height: 480px;
+  background: #ff0f0f;
+  right: -180px; top: 50%; transform: translateY(-50%);
+  filter: blur(130px); opacity: .14;
+  pointer-events: none; z-index: -2;
+}
+
+.page {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 20px;
+  gap: 18px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid rgba(255,255,255,.1);
+  background: rgba(255,255,255,.045);
+  backdrop-filter: blur(12px);
+  border-radius: 999px;
+  padding: 7px 18px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.5);
+}
+
+.badge-short { display: none; }
+
+.live-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #ff3b3b;
+  box-shadow: 0 0 8px #ff3b3b;
+  animation: blink 1.4s infinite;
+  flex-shrink: 0;
+}
+@keyframes blink { 50% { opacity: .15; } }
+
+.arena {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+
+.team {
+  width: 100px; height: 100px;
+  border-radius: 50%;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.team::before {
+  content: '';
+  position: absolute; inset: -1px; border-radius: 50%;
+  background: conic-gradient(from 0deg,
+    transparent 0%, #0066ff 18%, transparent 38%,
+    transparent 55%, #ff2020 73%, transparent 90%
+  );
+  animation: spin 4s linear infinite;
+  z-index: -1;
+}
+.team::after {
+  content: '';
+  position: absolute; inset: -10px; border-radius: 50%;
+  background: conic-gradient(from 0deg,
+    transparent, #0066ff 18%, transparent 38%,
+    #ff2020 68%, transparent 88%
+  );
+  filter: blur(14px); opacity: .6;
+  z-index: -2;
+  animation: spin 4s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.team-inner {
+  width: 92px; height: 92px; border-radius: 50%;
+  background: #07080f;
+  border: 1px solid rgba(255,255,255,.06);
+  display: flex; align-items: center; justify-content: center;
+}
+.team img {
+  width: 54px;
+  filter: drop-shadow(0 0 16px rgba(255,255,255,.1));
+}
+
+.vs {
+  font-size: 48px; font-weight: 900; letter-spacing: -2px;
+  color: #fff;
+  text-shadow: 0 0 16px rgba(255,255,255,.2), 0 0 50px rgba(0,110,255,.18);
+  animation: pulse 2.8s ease-in-out infinite;
+}
+@keyframes pulse {
+  50% { transform: scale(1.06);
+    text-shadow: 0 0 26px rgba(255,255,255,.3), 0 0 70px rgba(0,110,255,.28); }
+}
+
+.tipster-cutout {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.tipster-cutout img {
+  height: 280px;
+  width: auto;
+  display: block;
+  filter:
+    drop-shadow(0 0 30px rgba(0,90,255,.25))
+    drop-shadow(0 20px 40px rgba(0,0,0,.5));
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+.tipster-cutout::after {
+  content: '';
+  position: absolute;
+  bottom: 36px;
+  left: 50%; transform: translateX(-50%);
+  width: 160px; height: 18px;
+  background: radial-gradient(ellipse, rgba(0,80,255,.35), transparent 70%);
+  filter: blur(8px);
+}
+
+.content { text-align: center; }
+
+.eyebrow {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 3.5px; text-transform: uppercase;
+  color: rgba(60,150,255,.9); margin-bottom: 8px;
+}
+
+h1 {
+  font-size: 42px; font-weight: 900;
+  line-height: 1.1; letter-spacing: -1px;
+  margin-bottom: 8px;
+}
+
+h1 em {
+  font-style: italic;
+  background: linear-gradient(90deg, #2b85ff, #8b3fff);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: 13px; color: rgba(255,255,255,.4);
+  line-height: 1.75; max-width: 400px; margin: 0 auto;
+}
+
+.scarcity {
+  color: #ff3b3b;
+  font-weight: 700;
+  text-shadow: 0 0 12px rgba(255,50,50,.4);
+}
+
+.cta-wrap {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 10px;
+}
+
+.cta {
+  position: relative; border: none; border-radius: 999px;
+  padding: 22px 64px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px; font-weight: 900;
+  letter-spacing: 2.5px; text-transform: uppercase;
+  color: #fff; cursor: pointer; text-decoration: none;
+  background: linear-gradient(90deg, #0c6ef5, #6221d4);
+  box-shadow:
+    0 0 40px rgba(0,100,255,.45),
+    0 0 90px rgba(80,20,210,.2),
+    0 20px 40px rgba(0,0,0,.5),
+    inset 0 1px 0 rgba(255,255,255,.2);
+  overflow: hidden;
+  transition: transform .2s, box-shadow .2s;
+  animation: cta-pulse 2.5s ease-in-out infinite;
+}
+@keyframes cta-pulse {
+  50% {
+    box-shadow:
+      0 0 65px rgba(0,100,255,.65),
+      0 0 130px rgba(80,20,210,.3),
+      0 20px 40px rgba(0,0,0,.5),
+      inset 0 1px 0 rgba(255,255,255,.2);
+  }
+}
+.cta:hover {
+  transform: translateY(-4px) scale(1.04);
+  animation: none;
+  box-shadow:
+    0 0 70px rgba(0,100,255,.7),
+    0 0 140px rgba(80,20,210,.35),
+    0 28px 50px rgba(0,0,0,.4),
+    inset 0 1px 0 rgba(255,255,255,.22);
+}
+.cta::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(110deg, transparent 25%, rgba(255,255,255,.22) 50%, transparent 75%);
+  transform: translateX(-120%) skewX(-15deg);
+  animation: shine 3.2s infinite 1.4s;
+}
+@keyframes shine { to { transform: translateX(230%) skewX(-15deg); } }
+
+.trust {
+  font-size: 11px; color: rgba(255,255,255,.25);
+  font-weight: 500; letter-spacing: .3px;
+}
+.trust b { color: rgba(255,255,255,.48); font-weight: 600; }
+
+@media (hover: none) { #cursor-glow { display: none; } }
+
+@media (max-width: 600px) {
+  .page { gap: 16px; padding: 22px 18px; }
+  .badge { font-size: 10px; letter-spacing: 1.5px; padding: 7px 16px; }
+  .badge-text { display: none; }
+  .badge-short { display: inline; }
+  .arena { gap: 24px; }
+  .team { width: 90px; height: 90px; }
+  .team-inner { width: 82px; height: 82px; }
+  .team img { width: 50px; }
+  .vs { font-size: 40px; }
+  .tipster-cutout img { height: 280px; }
+  h1 { font-size: 30px; }
+  .eyebrow { font-size: 10px; }
+  .subtitle { font-size: 14px; }
+  .cta { width: 100%; max-width: 340px; padding: 20px 24px; font-size: 15px; letter-spacing: 2px; }
+  .trust { font-size: 12px; }
+}
+
+@media (max-width: 390px) {
+  .team { width: 76px; height: 76px; }
+  .team-inner { width: 68px; height: 68px; }
+  .team img { width: 42px; }
+  .vs { font-size: 32px; }
+  .arena { gap: 18px; }
+  h1 { font-size: 26px; }
+  .tipster-cutout img { height: 230px; }
+}
+
+</style>
+</head>
+<body>
+
+<div id="cursor-glow"></div>
+<div class="bg-blue"></div>
+<div class="bg-red"></div>
+
+<main class="page">
+
+  <div class="badge" id="el-badge">
+    <span class="live-dot"></span>
+    <span class="badge-text">UEFA Champions League &nbsp;·&nbsp; Final</span>
+    <span class="badge-short">UCL · Final</span>
+  </div>
+
+  <div class="arena" id="el-arena">
+    <div class="team" id="psg">
+      <div class="team-inner">
+        <img src="https://upload.wikimedia.org/wikipedia/en/a/a7/Paris_Saint-Germain_F.C..svg" alt="PSG">
+      </div>
+    </div>
+    <div class="vs" id="vs">VS</div>
+    <div class="team" id="arsenal">
+      <div class="team-inner">
+        <img src="https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg" alt="Arsenal">
+      </div>
+    </div>
+  </div>
+
+  <div class="tipster-cutout" id="el-tipster">
+    <img src="JP01LP.png" alt="Tipster">
+  </div>
+
+  <div class="content" id="el-content">
+    <div class="eyebrow">Análise Exclusiva VIP</div>
+    <h1>PSG vs Arsenal<br><em>Quem vence?</em></h1>
+    <p class="subtitle">Odd 2 confirmada. Vagas se esgotando —<br><span class="scarcity">acesso liberado só para os primeiros.</span></p>
+  </div>
+
+  <div class="cta-wrap" id="el-cta">
+    <a href="https://p.centralca.cc/" class="cta" onclick="dispararLead(event)">PEGAR AGORA</a>
+    <p class="trust">⚠️ Restam poucas vagas &nbsp;·&nbsp; <b>Acesso gratuito</b></p>
+  </div>
+
+</main>
+
+<script>
+const glow = document.getElementById('cursor-glow');
+let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+(function tick() {
+  glow.style.left = mx + 'px';
+  glow.style.top  = my + 'px';
+  requestAnimationFrame(tick);
+})();
+
+gsap.set(['#el-badge','#el-tipster','#el-content','#el-cta'], { opacity: 0, y: 22 });
+gsap.set(['#psg','#arsenal','#vs'], { opacity: 0 });
+
+const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+tl.to('#psg',        { opacity: 1, duration: 1.0 }, 0)
+  .from('#psg',      { x: -80 }, 0)
+  .to('#arsenal',    { opacity: 1, duration: 1.0 }, 0)
+  .from('#arsenal',  { x: 80  }, 0)
+  .to('#vs',         { opacity: 1, scale: 1, duration: .7, ease: 'back.out(2)' }, .4)
+  .from('#vs',       { scale: 0 }, .4)
+  .to('#el-badge',   { opacity: 1, y: 0, duration: .6 }, .15)
+  .to('#el-tipster', { opacity: 1, y: 0, duration: .7 }, .5)
+  .to('#el-content', { opacity: 1, y: 0, duration: .6 }, .7)
+  .to('#el-cta',     { opacity: 1, y: 0, duration: .6 }, .85);
+
+gsap.to('#psg',     { y: -7, duration: 2.3, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: 1.5 });
+gsap.to('#arsenal', { y: -7, duration: 2.8, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: 1.7 });
+</script>
+
+</body>
+</html>
