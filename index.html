@@ -13,14 +13,14 @@ n.queue=[];t=b.createElement(e);t.async=!0;
 t.src=v;s=b.getElementsByTagName(e)[0];
 s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '961619428689288');
+fbq('init', '953058917590545');
 fbq('track', 'PageView');
 async function dispararLead(e) {
   e.preventDefault();
   const eventId = 'cr_' + Date.now();
   fbq('track', 'CompleteRegistration', { currency: 'BRL', value: 0 }, { eventID: eventId });
   try {
-    await fetch('https://track-jp-production.up.railway.app/api/lead', {
+    await fetch('https://api-ramon-production.up.railway.app/api/lead', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -31,7 +31,7 @@ async function dispararLead(e) {
       })
     });
   } catch(err) {}
-  window.location.href = 'https://iv.clarimind.cc/';
+  window.location.href = 'https://rmesportiva.rmmago.uk/';
 }
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,900&display=swap" rel="stylesheet">
